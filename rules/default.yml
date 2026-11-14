@@ -1,0 +1,59 @@
+# Reglas por defecto. Añade las tuyas siguiendo el mismo formato.
+# group: grupo de captura a evaluar (0 = coincidencia completa)
+# min_entropy: descarta valores con entropía de Shannon inferior
+rules:
+  - id: aws-access-key
+    name: AWS Access Key ID
+    severity: critical
+    regex: '\b(?:AKIA|ASIA)[0-9A-Z]{16}\b'
+  - id: google-api-key
+    name: Google API Key
+    severity: high
+    regex: '\bAIza[0-9A-Za-z_\-]{35}\b'
+  - id: github-token
+    name: GitHub Token
+    severity: critical
+    regex: '\bgh[pousr]_[A-Za-z0-9]{36,}\b'
+  - id: slack-token
+    name: Slack Token
+    severity: high
+    regex: '\bxox[baprs]-[0-9A-Za-z\-]{10,48}\b'
+  - id: stripe-live-key
+    name: Stripe Live Secret Key
+    severity: critical
+    regex: '\bsk_live_[0-9a-zA-Z]{24,}\b'
+  - id: sendgrid-key
+    name: SendGrid API Key
+    severity: high
+    regex: '\bSG\.[A-Za-z0-9_\-]{22}\.[A-Za-z0-9_\-]{43}\b'
+  - id: twilio-key
+    name: Twilio API Key SID
+    severity: medium
+    regex: '\bSK[0-9a-fA-F]{32}\b'
+  - id: jwt
+    name: JSON Web Token
+    severity: medium
+    regex: '\beyJ[A-Za-z0-9_\-]{10,}\.eyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\b'
+  - id: private-key
+    name: Private Key Block
+    severity: critical
+    regex: '-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----'
+  - id: url-credentials
+    name: Credentials in URL
+    severity: high
+    regex: '[a-zA-Z][a-zA-Z0-9+.\-]*://[^/\s:@"\x27]{1,64}:[^/\s:@"\x27]{3,64}@[^/\s"\x27]+'
+  - id: generic-secret
+    name: Generic hardcoded secret
+    severity: medium
+    group: 2
+    min_entropy: 3.5
+    regex: '(?i)(api[_-]?key|secret|token|passwd|password|client[_-]?secret)["\x27]?\s*[:=]\s*["\x27]([^"\x27\s]{8,})["\x27]'
+  - id: firebase-db
+    name: Firebase Realtime DB
+    severity: info
+    regex: '\b[a-z0-9\-]+\.firebaseio\.com\b'
+  - id: internal-endpoint
+    name: Endpoint interno / API
+    severity: info
+    group: 1
+    regex: '["\x27`](/(?:api|admin|internal|private|debug|v[0-9]+)/[A-Za-z0-9_\-/\.{}]*)["\x27`]'
